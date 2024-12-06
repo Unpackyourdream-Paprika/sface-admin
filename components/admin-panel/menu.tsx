@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Ellipsis, LogOut } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 import { getMenuList } from "@/lib/menu-list";
@@ -13,8 +13,9 @@ import {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
-  TooltipProvider
+  TooltipProvider,
 } from "@/components/ui/tooltip";
+import axios from "axios";
 
 interface MenuProps {
   isOpen: boolean | undefined;
@@ -23,6 +24,31 @@ interface MenuProps {
 export function Menu({ isOpen }: MenuProps) {
   const pathname = usePathname();
   const menuList = getMenuList(pathname);
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      // 서버에 로그아웃 요청
+      const response = await axios.post(
+        "http://localhost:3000/v1/auth/logout",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("at")}`,
+          },
+        }
+      );
+
+      console.log(response, "response???");
+
+      // 로그아웃 성공 시 세션에서 토큰 제거
+      sessionStorage.removeItem("at");
+      sessionStorage.removeItem("rt");
+      router.push("/login");
+    } catch (error) {
+      console.error("로그아웃 실패:", error);
+    }
+  };
 
   return (
     <ScrollArea className="[&>div>div[style]]:!block">
@@ -118,7 +144,7 @@ export function Menu({ isOpen }: MenuProps) {
               <Tooltip delayDuration={100}>
                 <TooltipTrigger asChild>
                   <Button
-                    onClick={() => {}}
+                    onClick={handleLogout}
                     variant="outline"
                     className="w-full justify-center h-10 mt-5"
                   >
@@ -136,7 +162,9 @@ export function Menu({ isOpen }: MenuProps) {
                   </Button>
                 </TooltipTrigger>
                 {isOpen === false && (
-                  <TooltipContent side="right">Sign out</TooltipContent>
+                  <TooltipContent side="right">
+                    Sign out12312321321312
+                  </TooltipContent>
                 )}
               </Tooltip>
             </TooltipProvider>

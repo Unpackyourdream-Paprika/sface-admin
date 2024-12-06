@@ -28,7 +28,7 @@ export function Sidebar() {
       >
         <Button
           className={cn(
-            "transition-transform ease-in-out duration-300 mb-1",
+            "transition-transform ease-in-out duration-300 mb-1 justify-start",
             !getOpenState() ? "translate-x-1" : "translate-x-0"
           )}
           variant="link"
@@ -44,7 +44,7 @@ export function Sidebar() {
                   : "translate-x-0 opacity-100"
               )}
             >
-              Brand
+              Sface
             </h1>
           </Link>
         </Button>
